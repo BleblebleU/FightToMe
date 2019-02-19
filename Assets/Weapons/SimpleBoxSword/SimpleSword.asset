@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54e9d44e02529994db1465ed910946e3, type: 3}
+  m_Name: SimpleSword
+  m_EditorClassIdentifier: 
+  Damage:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 015636824906b3748b060393e2e34095, type: 2}
+  ColliderType: 0
+  AttackRangeX:
+    UseConstant: 1
+    ConstantValue: 1
+    Variable: {fileID: 0}
+  AttackRangeY:
+    UseConstant: 1
+    ConstantValue: 1
+    Variable: {fileID: 0}
+  AttackRadius:
+    UseConstant: 1
+    ConstantValue: 1
+    Variable: {fileID: 0}
+  angleOfBox: 0
+  timeBtwAttack:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: f55db98ee5e36074d812202fb9168143, type: 2}

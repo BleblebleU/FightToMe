@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1078bab1cdc494247adc9ef40a06a68e, type: 3}
+  m_Name: DisplayplayerList
+  m_EditorClassIdentifier: 
+  itemsList:
+  - {fileID: 11400000, guid: 4af7909f7cd22af449f9466209cbc5f2, type: 2}
+  - {fileID: 11400000, guid: 07313ffa2a208cd4496e88b69ebe7471, type: 2}
+  - {fileID: 11400000, guid: f289fc27aae33054d831a430d30e3258, type: 2}
+  - {fileID: 11400000, guid: 277e3cb33740e514f8b30688a6139d72, type: 2}
+  - {fileID: 11400000, guid: a0ee071abf379344aa1cf74894de28a7, type: 2}
+  gold:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  shopReferenceNumber:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}

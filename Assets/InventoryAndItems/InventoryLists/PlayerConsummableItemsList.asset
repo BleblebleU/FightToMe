@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 938f9a9eb3291d7428af462fa68a0ce0, type: 3}
+  m_Name: PlayerConsummableItemsList
+  m_EditorClassIdentifier: 
+  playerHealth:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: f11512b539f472c46916bdae2e68faf8, type: 2}
+  playerSpeed:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 09afbb8606e21ff459f762c05b6b9bfe, type: 2}
+  playerLeftRemainingMoves:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 87408843658466f4aa7cb35dd4172a4a, type: 2}
+  playerRightRemainingMoves:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: ba2a719be2a68bc409f8fa66a2538dae, type: 2}
+  playerJumpRemainingMoves:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: bb81c11e0569d8c4f8f3969879fc10b0, type: 2}
+  playerDownRemainingMoves:
+    UseConstant: 0
+    ConstantValue: 0
+    Variable: {fileID: 11400000, guid: 09b993872a4b51243a590ddaa2c2dba2, type: 2}
