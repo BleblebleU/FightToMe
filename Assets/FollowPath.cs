@@ -101,11 +101,11 @@ public class FollowPath : MonoBehaviour {
     private void MoveControler()
     {
         //Debug.Log("reachedX: " + reachedX + " [||] reachedY: " + reachedY);
-
+        bool isGrounded = Physics2D.Raycast(groundTransform.position, Vector2.down, 0.1f);
         if (!reachedX && !jumping)
         {
             MoveToX(followPath, rightPath, out reachedX);
-            bool isGrounded = Physics2D.Raycast(groundTransform.position, Vector2.down, 0.1f);
+            
             if (isGrounded)
             {
                 yAtGrounded = transform.position.y;
@@ -113,7 +113,7 @@ public class FollowPath : MonoBehaviour {
         }
         if (!reachedY && reachedX)
         {
-            MoveToY(followPath, reachedX, out reachedY);
+            MoveToY(followPath, reachedX, out reachedY, isGrounded);
         }
     }
 
@@ -266,7 +266,7 @@ public class FollowPath : MonoBehaviour {
         }
     }
 
-    private void MoveToY(List<Vector2> followPath, bool reachedX, out bool reachedPointY)
+    private void MoveToY(List<Vector2> followPath, bool reachedX, out bool reachedPointY, bool isGrounded)
     {
         reachedPointY = false;
         if(rb2d.velocity.y > 0 && Mathf.Floor(transform.position.y) == Mathf.Floor(followPath[0].y))
@@ -281,7 +281,7 @@ public class FollowPath : MonoBehaviour {
         }
         else
         {
-            if (reachedX && !reachedPointY)
+            if ((reachedX && !reachedPointY) && isGrounded)
             {
                 //Debug.Log(Mathf.Floor(transform.position.y) == Mathf.Floor(followPath[0].y));
                 if (!jumping && followPath[0].y > yAtGrounded)

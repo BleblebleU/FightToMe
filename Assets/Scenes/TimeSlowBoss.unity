@@ -259,8 +259,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 116947223}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.274, y: 1.42, z: 0}
-  m_LocalScale: {x: 11.981161, y: 0.744, z: 1}
+  m_LocalPosition: {x: -1.088, y: 1.42, z: 0}
+  m_LocalScale: {x: 9.6088915, y: 0.744, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 8
@@ -362,7 +362,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 370417159}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.65, y: -5.24, z: 0}
+  m_LocalPosition: {x: -1.04, y: -4.27, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1727341152}
@@ -483,12 +483,15 @@ MonoBehaviour:
   instantiatedEdges: {fileID: 553906810}
   edgePointPrefab: {fileID: 1428255232729488, guid: feccedd9434f1564b9e4a2e97265c73c,
     type: 2}
-  jumpBufferX: 1
+  speedX: 5
+  speedY: 3
+  jumpBufferX: 3
   jumpBufferY: 4
   whatIsObstacle:
     serializedVersion: 2
     m_Bits: 1024
   edgePoints: []
+  randomPathIndex: 0
 --- !u!1 &553906809
 GameObject:
   m_ObjectHideFlags: 0
@@ -1058,7 +1061,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1182654744}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.09, y: 2.88, z: 0}
+  m_LocalPosition: {x: -1.8, y: 4.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class PickUpFall : MonoBehaviour {
 
     public LayerMask whatIsGround;
@@ -9,10 +10,12 @@ public class PickUpFall : MonoBehaviour {
     public bool isGrounded;
 
     private Vector2 oldFallSpeed;
+    public Rigidbody2D rb2d;
 
     // Use this for initialization
     private void OnValidate () {
         oldFallSpeed = fallSpeed;
+        rb2d = GetComponent<Rigidbody2D>();
 	}
 	
 	// Update is called once per frame
@@ -21,6 +24,10 @@ public class PickUpFall : MonoBehaviour {
         {
             InstantiatedHorizontalMovement();
             FallToGround();
+        }
+        else
+        {
+            rb2d.bodyType = RigidbodyType2D.Static;
         }	
 	}
 

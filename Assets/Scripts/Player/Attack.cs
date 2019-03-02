@@ -36,7 +36,9 @@ public class Attack : MonoBehaviour {
 
         SetCurrentWeapon();
         //ONLY FOR DEBUGGING REMOVE OTHER WISE        //ONLY FOR DEBUGGING REMOVE OTHER WISE        //ONLY FOR DEBUGGING REMOVE OTHER WISE
-        attackPos.position = AttackPosition(playerAxisInputs, playerAxisBools); // Draws THE ATACK POSITION;
+        Vector3 attackPosition = AttackPosition(playerAxisInputs, playerAxisBools); // Draws THE ATACK POSITION;
+        Debug.Log(attackPosition);
+        attackPos.SetPositionAndRotation(attackPosition, Quaternion.identity);
         //ONLY FOR DEBUGGING REMOVE OTHER WISE        //ONLY FOR DEBUGGING REMOVE OTHER WISE        //ONLY FOR DEBUGGING REMOVE OTHER WISE
 
         if (timeBetweenAttack <= 0)
@@ -94,19 +96,20 @@ public class Attack : MonoBehaviour {
     {
         Vector3 attackPosition = new Vector3(transform.position.x, transform.position.y, 0);
 
-        if (playerInputBools[1].boolState == true)
+        if (Input.GetButton("Vertical") || playerInputBools[1].boolState == true)
         {
+            Debug.Log("Attacking up");
             attackPosition.x = transform.position.x;
             attackPosition.y = transform.position.y + inputsPlayer[1].Value;
             attackPosition.z = 0;
         }
-        if (playerInputBools[0].boolState == true)
+        if (Input.GetButton("Horizontal") /*|| playerInputBools[0].boolState == true*/)
         {
             attackPosition.x = transform.position.x + inputsPlayer[0].Value;
             attackPosition.y = transform.position.y;
             attackPosition.z = 0;
         }
-        else if(playerInputBools[0].boolState ==  false && playerInputBools[1].boolState == false)
+        else if (playerInputBools[0].boolState == false && playerInputBools[1].boolState == false)
         {
             attackPosition.x = transform.position.x;
             attackPosition.y = transform.position.y;

@@ -15,6 +15,10 @@ public class EnemyProperties : MonoBehaviour {
 
     void Start () {
         initialEnemyHealth = health;
+        for (int i = 0; i < itemsToDrop.Length; i++)
+        {
+            itemsToDrop[i].GetComponent<PickUpFall>().rb2d = itemsToDrop[i].GetComponent<Rigidbody2D>();
+        }
 	}
 	
 	void Update () {
