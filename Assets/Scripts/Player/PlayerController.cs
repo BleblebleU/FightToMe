@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour {
     public BoolVariable moveInputedY;
     public BoolVariable canMoveX;
     public BoolVariable canMoveY;
+    public BoolVariable dashing;
     [Space]
     [Header(header: "Player Jump Related:")]
     public float minJumpHeight;
@@ -79,6 +80,7 @@ public class PlayerController : MonoBehaviour {
     private BoxCollider2D playerBoxCollider2d;
 
     private bool inputJump = false;
+    private bool oldInputJump = false;
 
     private void OnValidate()
     {
@@ -119,15 +121,10 @@ public class PlayerController : MonoBehaviour {
 
         //Setting jumpInput
         #region SetJumpInput
-        if (Input.GetButtonDown("Vertical") && Input.GetAxisRaw("Vertical") > 0)
+        if ((Input.GetButtonDown("Vertical") || Input.GetButton("Vertical")) && Input.GetAxisRaw("Vertical") > 0)
         {
             inputJump = true;
         }
-        else if (Input.GetButton("Vertical"))
-        {
-            inputJump = false;
-        }
-
         else if (Input.GetButtonUp("Vertical"))
         {
             inputJump = false;
@@ -135,25 +132,29 @@ public class PlayerController : MonoBehaviour {
         #endregion
         //Controlling Movement
         #region Movement
-        if (canMoveX.boolState == true)
+        if (!dashing.boolState)
         {
-            MovementX(moveInputX.Value, speed, isGrounded);
-        }
-        else
-        {
-            if (playerKnockedBack == true)
+            //Debug.Log("not dashing");
+            if (canMoveX.boolState == true)
             {
-                if (Time.time >= knockbackCoolDown)
+                MovementX(moveInputX.Value, speed, isGrounded);
+            }
+            else
+            {
+                if (playerKnockedBack == true)
                 {
-                    canMoveX.boolState = true;
-                    playerKnockedBack = false;
+                    if (Time.time >= knockbackCoolDown)
+                    {
+                        canMoveX.boolState = true;
+                        playerKnockedBack = false;
+                    }
                 }
             }
-        }
-        if (canMoveY.boolState == true)
-        {
-            MovementY(moveInputY.Value, speed, isGrounded);
-            WallClimb(playerCanClimb);
+            if (canMoveY.boolState == true)
+            {
+                MovementY(moveInputY.Value, speed, isGrounded);
+                WallMech(playerCanClimb);
+            }
         }
         #endregion
     }
@@ -166,15 +167,17 @@ public class PlayerController : MonoBehaviour {
         {
             wallClimbing = false;
         }
-        rb2d.velocity = new Vector2(movementInputX * speedToMoveX.Value, rb2d.velocity.y);
-
-        if (facingRight.boolState == false && movementInputX > 0)
+        rb2d.velocity = (wallClimbing == false) ? new Vector2(movementInputX * speedToMoveX.Value, rb2d.velocity.y) : new Vector2(0, rb2d.velocity.y);
+        if(wallClimbing == false)
         {
-            Flip();
-        }
-        else if (facingRight.boolState == true && movementInputX < 0)
-        {
-            Flip();
+            if (facingRight.boolState == false && movementInputX > 0)
+            {
+                Flip();
+            }
+            else if (facingRight.boolState == true && movementInputX < 0)
+            {
+                Flip();
+            }
         }
     }
     
@@ -189,7 +192,7 @@ public class PlayerController : MonoBehaviour {
                 {
                     rb2d.velocity = new Vector2(rb2d.velocity.x, maxJumpSpeed);
                 }
-                else if (canSecondJump == true)
+                else if (canSecondJump == true && oldInputJump != inputJump)
                 {
                     rb2d.velocity = new Vector2(rb2d.velocity.x, maxJumpSpeed);
                     canSecondJump = false;
@@ -203,6 +206,7 @@ public class PlayerController : MonoBehaviour {
             {
                 rb2d.velocity = new Vector2(rb2d.velocity.x, 0);
             }
+            oldInputJump = inputJump;
         }
         FastFall();
     }
@@ -216,39 +220,72 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    private void WallClimb(BoolVariable playerCanClimb)
+    private void WallMech(BoolVariable canWallClimb)
     {
-        if(playerCanClimb.boolState == true)
+        if (canWallClimb.boolState)
         {
-            Vector3 checkPosition = new Vector3(transform.position.x + (moveInputX.Variable.Value * 0.1f), transform.position.y, transform.position.z);
+            Vector3 checkPosition = new Vector3(transform.position.x + (transform.localScale.x * 0.1f), transform.position.y, transform.position.z);
+            Vector3 checkCPosition = transform.position + Vector3.up;
+
             if (Physics2D.OverlapBox(checkPosition, playerBoxCollider2d.bounds.size, 0, whatIsWall))
             {
-                if (isGrounded.boolState == false && rb2d.velocity.y < 0)
+                bool ceelingUp = Physics2D.OverlapCircle(checkCPosition, 0.5f, whatIsCelling);
+                //Debug.Log(ceelingUp);
+                if (isGrounded.boolState == false && rb2d.velocity.y < 0 && !ceelingUp)
                 {
-                    if (inputJump == true && moveInputedX.boolState == true && jumpRestricted.boolState == false)
+                    if (jumpRestricted.boolState == false)
                     {
-                        rb2d.velocity = new Vector2(wallLeapXSpeed * -moveInputX.Variable.Value, wallJumpYSpeed);
-                        wallClimbing = true;
+                        float moveDir = 0;
+                        if(moveInputX.Variable.Value > 0)
+                        {
+                            moveDir = 1;
+                        }
+                        else if(moveInputX.Variable.Value < 0)
+                        {
+                            moveDir = -1;
+                        }
+                        else
+                        {
+                            moveDir = 0;
+                        }
+                        if(moveDir != 0 || moveInputedX.boolState)
+                        {
+                            if (moveDir != transform.localScale.x)
+                            {
+                                //Debug.Log("Leapt from wall");
+                                rb2d.velocity = new Vector2(2 * wallLeapXSpeed * -transform.localScale.x, 3 * wallJumpYSpeed);
+                                wallClimbing = true;
+                            }
+                            else if(inputJump && moveDir == transform.localScale.x)
+                            {
+                                //Debug.Log("Frog Hop from wall");
+                                rb2d.velocity = new Vector2(wallLeapXSpeed * -transform.localScale.x, wallJumpYSpeed);
+                                wallClimbing = true;
+                            }
+                            else if(moveDir == transform.localScale.x)
+                            {
+                                rb2d.velocity = new Vector2(rb2d.velocity.x, wallSlideSpeed);
+                                wallClimbing = true;
+                            }
+                        }
+                        else
+                        {
+                            //Debug.Log("Wall Sliding");
+                            rb2d.velocity = new Vector2(rb2d.velocity.x, wallSlideSpeed);
+                            wallClimbing = true;
+                        }
                     }
-                    else if (moveInputedX.boolState == true)
+                    else
                     {
                         rb2d.velocity = new Vector2(rb2d.velocity.x, wallSlideSpeed);
                         wallClimbing = true;
                     }
-                    else
-                    {
-                        wallClimbing = false;
-                    }
-                }
-                else
-                {
-                    wallClimbing = false;
                 }
             }
-        }
-        else
-        {
-            //Debug.Log("Cannot wall Climb");
+            else
+            {
+                wallClimbing = false;
+            }
         }
     }
 
@@ -359,8 +396,9 @@ public class PlayerController : MonoBehaviour {
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = new Color(1, 0, 0, 0.5f);
+        //Gizmos.color = new Color(1, 0, 0, 0.5f);
         //Gizmos.DrawWireSphere((Vector2)transform.position + Vector2.up * checkForCeelingAtHeight, checkRadius);
-        Gizmos.DrawCube((Vector2)transform.position, new Vector2(playerBoxCollider2d.bounds.size.x * 0.9f, playerBoxCollider2d.bounds.size.y + 0.05f));
+        //Gizmos.DrawCube((Vector2)transform.position, new Vector2(playerBoxCollider2d.bounds.size.x * 0.9f, playerBoxCollider2d.bounds.size.y + 0.05f));
+        Gizmos.DrawWireSphere(transform.position + Vector3.up, 0.4f);
     }
 }

@@ -23,8 +23,11 @@ public class Attack : MonoBehaviour {
 
     public LayerMask whatIsEnemy;
 
-    public FloatReference[] playerAxisInputs = new FloatReference[2];
-    public BoolVariable[] playerAxisBools = new BoolVariable[2];
+    public FloatReference verticalInputValue;
+    public FloatReference horizontalInputValue;
+    public BoolVariable verticalInput;
+    public BoolVariable horizontalInput;
+
     public Collider2D[] enemyColliders;
 
 
@@ -36,8 +39,8 @@ public class Attack : MonoBehaviour {
 
         SetCurrentWeapon();
         //ONLY FOR DEBUGGING REMOVE OTHER WISE        //ONLY FOR DEBUGGING REMOVE OTHER WISE        //ONLY FOR DEBUGGING REMOVE OTHER WISE
-        Vector3 attackPosition = AttackPosition(playerAxisInputs, playerAxisBools); // Draws THE ATACK POSITION;
-        Debug.Log(attackPosition);
+        Vector3 attackPosition = AttackPosition(); // Draws THE ATACK POSITION;
+        //Debug.Log(attackPosition);
         attackPos.SetPositionAndRotation(attackPosition, Quaternion.identity);
         //ONLY FOR DEBUGGING REMOVE OTHER WISE        //ONLY FOR DEBUGGING REMOVE OTHER WISE        //ONLY FOR DEBUGGING REMOVE OTHER WISE
 
@@ -63,7 +66,7 @@ public class Attack : MonoBehaviour {
         {
             //Debug.Log("Square Collider Reached");
 
-            enemyColliders = Physics2D.OverlapBoxAll(AttackPosition(playerAxisInputs, playerAxisBools), new Vector2(currentWeapon.AttackRangeX.Value, currentWeapon.AttackRangeY.Value) * 2, boxAngle, whatIsEnemy);
+            enemyColliders = Physics2D.OverlapBoxAll(AttackPosition(), new Vector2(currentWeapon.AttackRangeX.Value, currentWeapon.AttackRangeY.Value) * 2, boxAngle, whatIsEnemy);
 
             foreach (Collider2D col2d in enemyColliders)
             {
@@ -79,7 +82,7 @@ public class Attack : MonoBehaviour {
         else if (colliderType == ColliderType.Circle)
         {
             //Debug.Log("Circle Collider Reached");
-            enemyColliders = Physics2D.OverlapCircleAll(AttackPosition(playerAxisInputs, playerAxisBools), currentWeapon.AttackRadius.Value, whatIsEnemy);
+            enemyColliders = Physics2D.OverlapCircleAll(AttackPosition(), currentWeapon.AttackRadius.Value, whatIsEnemy);
 
             foreach (Collider2D col2D in enemyColliders)
             {
@@ -92,24 +95,27 @@ public class Attack : MonoBehaviour {
         }
     }
 
-    private Vector3 AttackPosition(FloatReference[] inputsPlayer, BoolVariable[] playerInputBools)
+    private Vector3 AttackPosition()
     {
         Vector3 attackPosition = new Vector3(transform.position.x, transform.position.y, 0);
 
-        if (Input.GetButton("Vertical") || playerInputBools[1].boolState == true)
+        bool vH = Input.GetButton("Vertical");
+        bool hH = Input.GetButton("Horizontal");
+
+        if (vH)
         {
-            Debug.Log("Attacking up");
+            //Debug.Log("Attacking up");
             attackPosition.x = transform.position.x;
-            attackPosition.y = transform.position.y + inputsPlayer[1].Value;
+            attackPosition.y = transform.position.y + verticalInputValue.Variable.Value;
             attackPosition.z = 0;
         }
-        if (Input.GetButton("Horizontal") /*|| playerInputBools[0].boolState == true*/)
+        if (hH)
         {
-            attackPosition.x = transform.position.x + inputsPlayer[0].Value;
+            attackPosition.x = transform.position.x + horizontalInputValue.Variable.Value;
             attackPosition.y = transform.position.y;
             attackPosition.z = 0;
         }
-        else if (playerInputBools[0].boolState == false && playerInputBools[1].boolState == false)
+        if (!vH && !hH)
         {
             attackPosition.x = transform.position.x;
             attackPosition.y = transform.position.y;

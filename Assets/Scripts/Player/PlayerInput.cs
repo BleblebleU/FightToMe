@@ -15,6 +15,8 @@ public class PlayerInput : MonoBehaviour
     [Header(header: "OtherInputs")]
     public BoolVariable AttackInputState;
 
+    public BoolVariable dash;
+
     public BoolVariable InventoryInputState;
     public BoolVariable openCloseShop;
 
@@ -148,6 +150,15 @@ public class PlayerInput : MonoBehaviour
             AttackInputState.boolState = false;
         }
         #endregion
+
+        if (Input.GetButton("Dash"))
+        {
+            dash.boolState = true;
+        }
+        else
+        {
+            dash.boolState = false;
+        }
     }
 
     //OPENING AND CLOSING UI
@@ -303,7 +314,7 @@ public class PlayerInput : MonoBehaviour
         }
         else if(directionAxis > 0)
         {
-            Debug.Log("Checked up restricted");
+            //Debug.Log("Checked up restricted");
             if (totalMovesGreaterDir.Value >= 1)
             {
                 _restrictGreaterDir.boolState = false;

@@ -38,7 +38,7 @@ public class SpecialMoves : MonoBehaviour {
 
     protected void ChecktToActivate()
     {
-        if (playerDash.boolState == true && Input.GetButton("Dash"))
+        if (playerDash.boolState == true/* && Input.GetButton("Dash")*/)
         {
             dashAbility.enabled = true;
         }

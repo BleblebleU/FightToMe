@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class Dash : MonoBehaviour
 {
-    public FloatReference HorizontalInputValue;
-    public BoolVariable HorizontalInput;
+    public BoolVariable dash;
+    public BoolVariable dashing;
+
+    public BoolVariable shakeCamera;
 
     //private int HorizontalDown;
     public bool dashUsed;
     private float dashTime;
 
     public float dashSpeed;
+    public float dashForTime;
+    public float remainingDashForTime;
     public float dashCooldownTime;
     public float slowDownDashFall = 1.0f;
 
@@ -29,31 +33,38 @@ public class Dash : MonoBehaviour
 
     void FixedUpdate()
     {
-        ResetDash();
-        DashExecute();
+        if (remainingDashForTime <= 0)
+        {
+            dashTime = Time.time + dashCooldownTime;
+            remainingDashForTime = dashForTime;
+        }
+        if (dash.boolState && dashTime < Time.time)
+        {
+            DashExecute();
+        }
+        else if(dashing.boolState)
+        {
+            ResetDash();
+        }
     }
 
     void DashExecute()
     {
-        if (HorizontalInput.boolState && dashTime < Time.time)                      //if want time to move before executing dash change HorizontalInput.boolState to HorizontalDoen == 1 so that it is executed on the next frame instead of the same one
+        if (remainingDashForTime > 0)                
         {
-            float direction = HorizontalInputValue.Value;
-            dashTime = Time.time + dashCooldownTime;
-            //HorizontalDown++;
-            Instantiate(dashEffect, rb.position, Quaternion.Euler(90, 0, -direction * 90));
-            DashPlayer(direction);
+            Instantiate(dashEffect, rb.position, Quaternion.Euler(90, 0, -90));
+            DashPlayer();
         }
     }
 
-    void DashPlayer(float direction)
+    void DashPlayer()
     {
-        if (HorizontalInput.boolState && direction != 0)
-        {
-            rb.velocity = new Vector2((Mathf.Abs(direction) / direction) * dashSpeed, rb.velocity.y);
-            shakeScript.shouldShake = true;
-            dashUsed = true;
-            //Debug.Log("Dasing");
-        }
+        rb.velocity = new Vector2(transform.localScale.x * dashSpeed, rb.velocity.y);
+        shakeScript.shouldShake = true;
+        shakeCamera.boolState = true;
+        remainingDashForTime -= Time.deltaTime;
+        dashing.boolState = true;
+        //Debug.Log("Dasing");
     }
 
     void ResetDash()
@@ -68,7 +79,6 @@ public class Dash : MonoBehaviour
         //{
         //    rb.velocity = new Vector2(HorizontalInputValue.Value, rb.velocity.y / slowDownDashFall);
         //}
-
-        dashUsed = false;
+        dashing.boolState = false;
     }
 }

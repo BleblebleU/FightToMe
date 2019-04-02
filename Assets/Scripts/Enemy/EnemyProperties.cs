@@ -2,6 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EnemyType
+{
+    left,
+    right,
+    up,
+    down
+}
+
 public class EnemyProperties : MonoBehaviour {
 
     public float health;
